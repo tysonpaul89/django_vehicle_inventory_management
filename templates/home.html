@@ -1,0 +1,94 @@
+{% extends '_base.html' %}
+
+{% block title %}Vehicle Inventory Management{% endblock title %}
+{% block page_title %}Vehicles{% endblock page_title %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <style>
+        #vechicle-type option:first-child {
+            display: none;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+    <input type="hidden" id="ajax-vehicle-listing" value="{% url 'vehicle-listing' %}">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="vechicle-type"><strong>Vechicle Type</strong></label>
+                    <select class="form-control" name="vehicle_type" id="vechicle-type">
+                        <option value="0">Select a vehicle type</option>
+                        {% for vehicle_type in vehicle_types %}
+                            <option value="{{vehicle_type.pk}}">{{vehicle_type.type}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="offset-md-6"></div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mt-5">
+        <div class="table-responsive">
+            <table id="vehicles" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Model</th>
+                        <th>Price</th>
+                        <th>Fuel Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            // Ajax url to fetch vechile data
+            var vehicleDataUrl = $.trim($('#ajax-vehicle-listing').val())
+
+            // Initializing Datatables plugin
+            var table = $('#vehicles').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: vehicleDataUrl,
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                },
+                columns: [
+                        null,
+                        null,
+                        null,
+                        null,
+                        { orderable: false }, // To disable sorting in the column.
+                    ],
+                pageLength: 10, // Items per page
+                language: {
+                    emptyTable: '<p class="text-center h5">Data not available</p>',
+                    processing: '<p class="text-center h3">Loading...</p>'
+                }
+            })
+
+            // Vechicle Type change event to fecth data for the datatables
+            $(document).on('change', '#vechicle-type', function(e){
+                var vechicleTypeId = $.trim($('#vechicle-type').val())
+                table.ajax.url(vehicleDataUrl  + '?vechicleType=' + vechicleTypeId)
+                table.ajax.reload()
+            })
+        });
+    </script>
+{% endblock js %}

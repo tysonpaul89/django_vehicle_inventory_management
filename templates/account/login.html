@@ -1,0 +1,37 @@
+{% extends '_auth.html' %}
+{% load crispy_forms_tags %}
+{% load socialaccount %}
+
+{% block title %}Login{% endblock title %}
+
+{% block css %}
+    <style>
+        .asteriskField {
+            color: red;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="container h-100">
+    <div class="row align-items-center h-100">
+        <div class="col-6 mx-auto">
+            <form method="post" action=".">
+                <div class="col-md-12">
+                    <div class="text-center mb-4">
+                        <h3 class="mt-5">Login</h3>
+                    </div>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+
+                    <p class="mt-2 text-center">Don't have an account! <a href="{% url 'account_signup' %}">Sign Up</a></p>
+                    <p class="h4 mt-2 text-center">OR</p>
+                    <p class="mt-2 h4 text-center"><a href="{% provider_login_url 'google' %}">Login with Google</a></p>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
