@@ -19,8 +19,10 @@ python manage.py migrate
 
 # Google OAuth Setup
 Use the following medium post for instructions
+
 https://medium.com/@whizzoe/in-5-mins-set-up-google-login-to-sign-up-users-on-django-e71d5c38f5d5
 
 # Reference:
 https://medium.com/@whizzoe/in-5-mins-set-up-google-login-to-sign-up-users-on-django-e71d5c38f5d5
+
 Django for Professionals by William S Vincent
