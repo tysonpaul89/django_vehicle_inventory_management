@@ -9,7 +9,7 @@ This app have the following features:
 
 ## Installation
 ``` shell
-git clone 
+git clone https://github.com/tysonpaul89/django_vehicle_inventory_management.git
 cd django_vehicle_inventory_management
 virtualenv .env -p python3.8
 source .env/bin/activate
